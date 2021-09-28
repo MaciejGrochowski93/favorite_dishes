@@ -1,23 +1,17 @@
 package maciej.grochowski.favorite_dishes.meal;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import maciej.grochowski.favorite_dishes.gourmet.Gourmet;
+import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
 import java.util.Set;
 
-@Entity
 @Data
 @NoArgsConstructor
-@Builder
-public class Meal {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "meal_id")
-    private Integer mealId;
+@AllArgsConstructor
+public class MealDTO {
 
     private String mealName;
 
@@ -25,8 +19,8 @@ public class Meal {
 
     private MealTaste mealTaste;
 
+    @Nullable
     private MealRating mealRating;
 
-    @ManyToMany
     private Set<Gourmet> gourmetSet;
 }
