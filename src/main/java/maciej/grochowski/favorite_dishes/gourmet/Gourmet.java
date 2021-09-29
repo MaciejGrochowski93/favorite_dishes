@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import maciej.grochowski.favorite_dishes.meal.Meal;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -23,7 +24,11 @@ public class Gourmet {
 
     private String gourmetEmail;
 
+    private String password;
+
     private Integer gourmetAge;
+
+    private List<String> roles;
 
     @ManyToMany
     private Set<Meal> mealsSet;

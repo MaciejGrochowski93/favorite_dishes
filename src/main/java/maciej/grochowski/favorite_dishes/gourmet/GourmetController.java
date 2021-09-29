@@ -2,6 +2,7 @@ package maciej.grochowski.favorite_dishes.gourmet;
 
 import lombok.AllArgsConstructor;
 import maciej.grochowski.favorite_dishes.registration.GourmetRegisterDTO;
+import maciej.grochowski.favorite_dishes.registration.UserAlreadyExistsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,11 +29,18 @@ class GourmetController {
 
     @PostMapping("/registration")
     public String registerGourmet(@ModelAttribute("gourmet") @Valid GourmetRegisterDTO gourmetDTO,
-                                  BindingResult gourmetResult) {
+                                  BindingResult gourmetResult, Model model) {
         if (gourmetResult.hasErrors()) {
             return "registration";
         }
-        gourmetService.registerGourmet(gourmetDTO);
+
+        try {
+            gourmetService.registerGourmet(gourmetDTO);
+        } catch(UserAlreadyExistsException uae) {
+            model.addAttribute("errorMessage", "This account already exists.");
+        }
+        String providedEmail = gourmetDTO.getDTOEmail();
+        model.addAttribute("registerSuccess", String.format("Account %s registered successfully.", providedEmail));
         return "redirect:/gourmet";
     }
 }

@@ -2,6 +2,7 @@ package maciej.grochowski.favorite_dishes.gourmet;
 
 import lombok.AllArgsConstructor;
 import maciej.grochowski.favorite_dishes.registration.GourmetRegisterDTO;
+import maciej.grochowski.favorite_dishes.registration.UserAlreadyExistsException;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -19,6 +20,10 @@ class GourmetService {
     }
 
     public void registerGourmet(GourmetRegisterDTO DTO) {
+        String providedEmail = DTO.getDTOEmail();
+        if (emailExists(providedEmail)) {
+            throw new UserAlreadyExistsException(String.format("Email %s is already registered.", providedEmail));
+        }
         Gourmet gourmet = createGourmetFromDTOs(DTO);
         gourmetRepository.save(gourmet);
     }
@@ -30,5 +35,9 @@ class GourmetService {
                 .gourmetEmail(gourmetDTO.getDTOEmail())
                 .mealsSet(new LinkedHashSet<>())
                 .build();
+    }
+
+    private boolean emailExists(String email) {
+        return gourmetRepository.findGourmetByGourmetEmail(email).isPresent();
     }
 }
