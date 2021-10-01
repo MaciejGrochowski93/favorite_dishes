@@ -9,11 +9,15 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
+@Transactional
+@Service
 public class MyUserDetailsService implements UserDetailsService {
 
     private final GourmetRepository gourmetRepository;
@@ -21,7 +25,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Gourmet gourmet = gourmetRepository
-                .findGourmetByGourmetEmail(email)
+                .findGourmetByEmail(email)
                 .orElseThrow(() -> new UserDoesNotExist(String.format("User with email %s doesn't exist.", email)));
 
         boolean enabled = true;
@@ -30,7 +34,7 @@ public class MyUserDetailsService implements UserDetailsService {
         boolean accountNotLocked = true;
 
         return new User(
-                gourmet.getGourmetName(),
+                gourmet.getName(),
                 gourmet.getPassword(),
                 enabled,
                 accountNotExpired,

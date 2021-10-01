@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import maciej.grochowski.favorite_dishes.gourmet.Gourmet;
 import org.springframework.lang.Nullable;
 
+import javax.persistence.ElementCollection;
 import java.util.Set;
 
 @Data
@@ -22,5 +23,6 @@ public class MealDTO {
     @Nullable
     private MealRating mealRating;
 
+    @ElementCollection(targetClass = Gourmet.class)
     private Set<Gourmet> gourmetSet;
 }

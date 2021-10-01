@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <div th:replace="fragments/head :: headPart"></div>
 </head>
 <body>
+<form th:action="@{/gourmet/registration}" th:object="${gourmet}" method="POST" enctype="utf8">
+    <div class="container">
+        <div class="form-group">
+            <input th:field="*{DTOName}" placeholder="Your name:"/>
+            <p th:each="error: ${#fields.errors('DTOName')}"
+               th:text="${error}">Validation error</p>
+        </div>
 
+        <div class="form-group">
+            <input type="date" th:field="*{DTOBirthDate}" placeholder="Your date of birth:"/>
+            <p th:each="error : ${#fields.errors('DTOBirthDate')}"
+               th:text="${error}">Validation error</p>
+        </div>
+
+        <div class="form-group">
+            <input type="email" th:field="*{DTOEmail}" placeholder="Your email:" />
+            <p th:each="error : ${#fields.errors('DTOEmail')}"
+               th:text="${error}">Validation error</p>
+        </div>
+
+        <div class="form-group">
+            <input type="password" th:field="*{DTOPassword}" placeholder="Your password:"/>
+            <p th:each="error : ${#fields.errors('DTOPassword')}"
+               th:text="${error}">Validation error</p>
+        </div>
+
+        <div class="form-group">
+            <input type="password" th:field="*{DTOMatchingPassword}" placeholder="Confirm your password:"/>
+            <p th:each="error : ${#fields.errors('DTOMatchingPassword')}"
+               th:text="${error}">Validation error</p>
+        </div>
+        <button type="submit" class="btn btn-info col-2">Sign in</button>
+    </div>
+</form>
 </body>
 </html>

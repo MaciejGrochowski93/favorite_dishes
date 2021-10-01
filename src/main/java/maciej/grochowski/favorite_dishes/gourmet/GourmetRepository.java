@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface GourmetRepository extends JpaRepository<Gourmet, Integer> {
 
-    Optional<Gourmet> findGourmetByGourmetEmail(String email);
+    Optional<Gourmet> findGourmetByEmail(String email);
 }

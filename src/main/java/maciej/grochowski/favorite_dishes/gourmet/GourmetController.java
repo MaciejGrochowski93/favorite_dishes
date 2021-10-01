@@ -14,16 +14,22 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
 
-@Controller
 @AllArgsConstructor
 @RequestMapping("/gourmet")
+@Controller
 class GourmetController {
 
     private final GourmetService gourmetService;
 
+    @GetMapping
+    public String home() {
+        return "homepage";
+    }
+
     @GetMapping("/registration")
     public String registerGourmetForm(WebRequest request, Model model) {
-        gourmetService.addGourmetToModel(model);
+        GourmetRegisterDTO gourmetDTO = new GourmetRegisterDTO();
+        model.addAttribute("gourmet", gourmetDTO);
         return "registration";
     }
 
@@ -38,6 +44,7 @@ class GourmetController {
             gourmetService.registerGourmet(gourmetDTO);
         } catch(UserAlreadyExistsException uae) {
             model.addAttribute("errorMessage", "This account already exists.");
+            return "registration";
         }
         String providedEmail = gourmetDTO.getDTOEmail();
         model.addAttribute("registerSuccess", String.format("Account %s registered successfully.", providedEmail));

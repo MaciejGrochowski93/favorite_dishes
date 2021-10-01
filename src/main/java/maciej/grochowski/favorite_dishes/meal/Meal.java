@@ -1,5 +1,6 @@
 package maciej.grochowski.favorite_dishes.meal;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +9,11 @@ import maciej.grochowski.favorite_dishes.gourmet.Gourmet;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
+@Entity
 public class Meal {
 
     @Id
@@ -27,6 +29,6 @@ public class Meal {
 
     private MealRating mealRating;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "mealsSet")
     private Set<Gourmet> gourmetSet;
 }
