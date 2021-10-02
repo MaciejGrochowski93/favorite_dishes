@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="fragments/head :: headPart"></div>
+</head>
+<body>
+<form th:action="@{/meal/add}" th:object="${DTO}" method="POST">
+    <div class="container">
+        <div class="form-group">
+            <input th:field="*{mealName}" placeholder="Meal name:"/>
+            <p th:each="error: ${#fields.errors('mealName')}"
+               th:text="${error}" class="alert alert-warning"></p>
+        </div>
+
+        <div class="form-group">
+            <input th:field="*{mealCountry}" placeholder="Meal country:"/>
+            <p th:each="error: ${#fields.errors('mealCountry')}"
+               th:text="${error}" class="alert alert-warning"></p>
+        </div>
+
+        <div class="form-group">
+            <label>Taste: </label>
+            <select name="mealTaste">
+                <option th:each="tasteOption : ${T(maciej.grochowski.favorite_dishes.meal.MealTaste).values()}"
+                        th:value="${tasteOption}" th:text="${tasteOption.getDisplayValue()}"></option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Meal</button>
+        <div th:if="${mealExistsException}" th:text="${mealExistsException}" class="alert alert-warning"></div>
+    </div>
+</form>
+</body>
+</html>

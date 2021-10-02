@@ -9,33 +9,34 @@
         <div class="form-group">
             <input th:field="*{DTOName}" placeholder="Your name:"/>
             <p th:each="error: ${#fields.errors('DTOName')}"
-               th:text="${error}">Validation error</p>
+               th:text="${error}" class="alert alert-warning"></p>
         </div>
 
         <div class="form-group">
             <input type="date" th:field="*{DTOBirthDate}" placeholder="Your date of birth:"/>
             <p th:each="error : ${#fields.errors('DTOBirthDate')}"
-               th:text="${error}">Validation error</p>
+               th:text="${error}" class="alert alert-warning"></p>
         </div>
 
         <div class="form-group">
-            <input type="email" th:field="*{DTOEmail}" placeholder="Your email:" />
+            <input type="email" th:field="*{DTOEmail}" placeholder="Your email:"/>
             <p th:each="error : ${#fields.errors('DTOEmail')}"
-               th:text="${error}">Validation error</p>
+               th:text="${error}" class="alert alert-warning"></p>
         </div>
 
         <div class="form-group">
             <input type="password" th:field="*{DTOPassword}" placeholder="Your password:"/>
             <p th:each="error : ${#fields.errors('DTOPassword')}"
-               th:text="${error}">Validation error</p>
+               th:text="${error}" class="alert alert-warning"></p>
         </div>
 
         <div class="form-group">
             <input type="password" th:field="*{DTOMatchingPassword}" placeholder="Confirm your password:"/>
             <p th:each="error : ${#fields.errors('DTOMatchingPassword')}"
-               th:text="${error}">Validation error</p>
+               th:text="${error}" class="alert alert-warning"></p>
         </div>
-        <button type="submit" class="btn btn-info col-2">Sign in</button>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+        <div th:if="${gourmetExistsException}" th:text="${gourmetExistsException}" class="alert alert-warning"></div>
     </div>
 </form>
 </body>

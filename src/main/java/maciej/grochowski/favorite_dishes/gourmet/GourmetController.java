@@ -42,8 +42,8 @@ class GourmetController {
 
         try {
             gourmetService.registerGourmet(gourmetDTO);
-        } catch(UserAlreadyExistsException uae) {
-            model.addAttribute("errorMessage", "This account already exists.");
+        } catch (UserAlreadyExistsException uae) {
+            model.addAttribute("gourmetExistsException", "This account already exists.");
             return "registration";
         }
         String providedEmail = gourmetDTO.getDTOEmail();

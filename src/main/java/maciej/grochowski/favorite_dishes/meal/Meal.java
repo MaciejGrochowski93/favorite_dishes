@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import maciej.grochowski.favorite_dishes.gourmet.Gourmet;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -23,7 +24,7 @@ public class Meal {
 
     private String mealName;
 
-    private String mealOriginCountry;
+    private String mealCountry;
 
     private MealTaste mealTaste;
 
@@ -31,4 +32,17 @@ public class Meal {
 
     @ManyToMany(mappedBy = "mealsSet")
     private Set<Gourmet> gourmetSet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Meal)) return false;
+        Meal meal = (Meal) o;
+        return getMealName().equals(meal.getMealName()) && getMealTaste() == meal.getMealTaste();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getMealName(), getMealTaste());
+    }
 }
