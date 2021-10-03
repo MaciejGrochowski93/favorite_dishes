@@ -16,13 +16,8 @@ class GourmetService {
     private final GourmetRepository gourmetRepository;
 
     public Set<Meal> getMealsSetOfGourmet(int gourmetId) {
-        Optional<Gourmet> gourmetById = gourmetRepository.findById(gourmetId);
-        Set<Meal> mealSet = new LinkedHashSet<>();
-        gourmetById.ifPresent(gourmet -> {
-            Set<Meal> mealsOfGourmet = gourmet.getMealsSet();
-            mealSet.addAll(mealsOfGourmet);
-        });
-        return mealSet;
+        Gourmet gourmetById = gourmetRepository.findGourmetById(gourmetId);
+        return gourmetById.getMealsSet();
     }
 
     public void addMealToGourmetSet(int gourmetId, Meal meal, MealRating rating) {
