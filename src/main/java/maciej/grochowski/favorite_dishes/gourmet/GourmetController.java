@@ -46,7 +46,7 @@ class GourmetController {
             model.addAttribute("gourmetExistsException", "This account already exists.");
             return "registration";
         }
-        String providedEmail = gourmetDTO.getDTOEmail();
+        String providedEmail = gourmetDTO.getEmail();
         model.addAttribute("registerSuccess", String.format("Account %s registered successfully.", providedEmail));
         return "redirect:/gourmet";
     }

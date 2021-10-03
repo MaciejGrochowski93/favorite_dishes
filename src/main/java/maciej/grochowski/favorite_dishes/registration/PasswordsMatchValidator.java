@@ -1,8 +1,11 @@
 package maciej.grochowski.favorite_dishes.registration;
 
+import org.springframework.context.annotation.Configuration;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+@Configuration
 class PasswordsMatchValidator implements ConstraintValidator<PasswordsMatch, Object> {
 
     @Override
@@ -12,6 +15,6 @@ class PasswordsMatchValidator implements ConstraintValidator<PasswordsMatch, Obj
     @Override
     public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
         GourmetRegisterDTO DTO = (GourmetRegisterDTO) object;
-        return DTO.getDTOPassword().equals(DTO.getDTOMatchingPassword());
+        return DTO.getPassword().equals(DTO.getMatchingPassword());
     }
 }

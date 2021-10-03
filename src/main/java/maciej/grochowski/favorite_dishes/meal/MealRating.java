@@ -1,6 +1,6 @@
 package maciej.grochowski.favorite_dishes.meal;
 
-enum MealRating {
+public enum MealRating {
 
     LIKED("Liked"),
     DISLIKED("Disliked");

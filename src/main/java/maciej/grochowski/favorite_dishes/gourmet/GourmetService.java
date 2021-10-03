@@ -1,12 +1,13 @@
 package maciej.grochowski.favorite_dishes.gourmet;
 
 import lombok.AllArgsConstructor;
+import maciej.grochowski.favorite_dishes.meal.Meal;
+import maciej.grochowski.favorite_dishes.meal.MealRating;
 import maciej.grochowski.favorite_dishes.registration.GourmetRegisterDTO;
 import maciej.grochowski.favorite_dishes.registration.UserAlreadyExistsException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -14,8 +15,26 @@ class GourmetService {
 
     private final GourmetRepository gourmetRepository;
 
+    public Set<Meal> getMealsSetOfGourmet(int gourmetId) {
+        Optional<Gourmet> gourmetById = gourmetRepository.findById(gourmetId);
+        Set<Meal> mealSet = new LinkedHashSet<>();
+        gourmetById.ifPresent(gourmet -> {
+            Set<Meal> mealsOfGourmet = gourmet.getMealsSet();
+            mealSet.addAll(mealsOfGourmet);
+        });
+        return mealSet;
+    }
+
+    public void addMealToGourmetSet(int gourmetId, Meal meal, MealRating rating) {
+        Optional<Gourmet> gourmetById = gourmetRepository.findById(gourmetId);
+        gourmetById.ifPresent(gourmet -> {
+            meal.setMealRating(rating);
+            gourmet.getMealsSet().add(meal);
+        });
+    }
+
     public void registerGourmet(GourmetRegisterDTO DTO) {
-        String providedEmail = DTO.getDTOEmail();
+        String providedEmail = DTO.getEmail();
         if (emailExists(providedEmail)) {
             throw new UserAlreadyExistsException(String.format("Email %s is already registered.", providedEmail));
         }
@@ -25,10 +44,10 @@ class GourmetService {
 
     private Gourmet createGourmetFromDTOs(GourmetRegisterDTO gourmetDTO) {
         return Gourmet.builder()
-                .name(gourmetDTO.getDTOName())
-                .birthDate(gourmetDTO.getDTOBirthDate())
-                .email(gourmetDTO.getDTOEmail())
-                .password(gourmetDTO.getDTOPassword())
+                .name(gourmetDTO.getName())
+                .birthDate(gourmetDTO.getBirthDate())
+                .email(gourmetDTO.getEmail())
+                .password(gourmetDTO.getPassword())
                 .mealsSet(new LinkedHashSet<>())
                 .roles(Arrays.asList("ROLE_USER"))
                 .build();

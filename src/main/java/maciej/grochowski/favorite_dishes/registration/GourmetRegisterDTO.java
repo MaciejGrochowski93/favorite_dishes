@@ -19,22 +19,22 @@ public class GourmetRegisterDTO {
 
     @NotBlank
     @Length(min = 1, max = 30, message = "Your name must consist of 1 to 30 signs.")
-    private String DTOName;
+    private String name;
 
     @NotBlank
     @ProperEmail
-    private String DTOEmail;
+    private String email;
 
     @NotBlank
     @Length(min = 5, max = 30, message = "Your password must consist of 5 to 30 signs.")
-    private String DTOPassword;
+    private String password;
 
     @NotBlank
     @Length(min = 5, max = 30, message = "Your password must consist of 5 to 30 signs.")
-    private String DTOMatchingPassword;
+    private String matchingPassword;
 
     @NotNull
     @Past(message = "Cannot provide future date.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate DTOBirthDate;
+    private LocalDate birthDate;
 }
