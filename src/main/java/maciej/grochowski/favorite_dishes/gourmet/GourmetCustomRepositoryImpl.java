@@ -22,6 +22,7 @@ public class GourmetCustomRepositoryImpl implements GourmetCustomRepository {
 
         Predicate gourmetIdPredicate = builder.equal(root.get("gourmetId"), id);
         criteriaQuery.where(gourmetIdPredicate);
+
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 }

@@ -3,6 +3,7 @@ package maciej.grochowski.favorite_dishes.gourmet;
 import lombok.AllArgsConstructor;
 import maciej.grochowski.favorite_dishes.meal.Meal;
 import maciej.grochowski.favorite_dishes.meal.MealRating;
+import maciej.grochowski.favorite_dishes.meal.MealRepository;
 import maciej.grochowski.favorite_dishes.registration.GourmetRegisterDTO;
 import maciej.grochowski.favorite_dishes.registration.UserAlreadyExistsException;
 import org.springframework.stereotype.Service;
@@ -11,21 +12,27 @@ import java.util.*;
 
 @AllArgsConstructor
 @Service
-class GourmetService {
+public class GourmetService {
 
     private final GourmetRepository gourmetRepository;
+    private final MealRepository mealRepository;
 
-    public Set<Meal> getMealsSetOfGourmet(int gourmetId) {
-        Gourmet gourmetById = gourmetRepository.findGourmetById(gourmetId);
-        return gourmetById.getMealsSet();
+    public void addMealToGourmetList(int gourmetId, int mealId, MealRating rating) {
+        List<Meal> mealsOfGourmet = findMealsByGourmetId(gourmetId);
+        Meal meal = mealRepository.findMealById(mealId);;
+        if (!mealsOfGourmet.contains(meal)) {
+            Meal ratedMeal = Meal.builder()
+                    .mealName(meal.getMealName())
+                    .mealTaste(meal.getMealTaste())
+                    .mealCountry(meal.getMealCountry())
+                    .mealRating(rating)
+                    .build();
+            mealsOfGourmet.add(ratedMeal);
+        }
     }
 
-    public void addMealToGourmetSet(int gourmetId, Meal meal, MealRating rating) {
-        Optional<Gourmet> gourmetById = gourmetRepository.findById(gourmetId);
-        gourmetById.ifPresent(gourmet -> {
-            meal.setMealRating(rating);
-            gourmet.getMealsSet().add(meal);
-        });
+    public List<Meal> findMealsByGourmetId(int id) {
+        return mealRepository.findMealsOfGourmet(id);
     }
 
     public void registerGourmet(GourmetRegisterDTO DTO) {
@@ -43,7 +50,7 @@ class GourmetService {
                 .birthDate(gourmetDTO.getBirthDate())
                 .email(gourmetDTO.getEmail())
                 .password(gourmetDTO.getPassword())
-                .mealsSet(new LinkedHashSet<>())
+                .mealsList(new ArrayList<>())
                 .roles(Arrays.asList("ROLE_USER"))
                 .build();
     }
@@ -52,3 +59,8 @@ class GourmetService {
         return gourmetRepository.findGourmetByEmail(email).isPresent();
     }
 }
+
+//    public List<Meal> getMealsListByGourmetId(int gourmetId) {
+//        Gourmet gourmetById = gourmetRepository.findGourmetById(gourmetId);
+//        return gourmetById.getMealsList();
+//    }

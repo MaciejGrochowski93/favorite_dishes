@@ -10,7 +10,6 @@ import maciej.grochowski.favorite_dishes.meal.Meal;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -38,5 +37,5 @@ public class Gourmet {
     @ManyToMany
     @ElementCollection(targetClass = Meal.class)
     @JsonIgnore
-    private Set<Meal> mealsSet;
+    private List<Meal> mealsList;
 }

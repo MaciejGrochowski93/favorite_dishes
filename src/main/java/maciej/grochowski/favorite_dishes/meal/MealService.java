@@ -12,7 +12,11 @@ public class MealService {
 
     private final MealRepository mealRepository;
 
-    public List<Meal> findAllMealsByName() {
+    public List<Meal> getMealsOfGourmet(int gourmetId) {
+        return mealRepository.findMealsOfGourmet(gourmetId);
+    }
+
+    public List<Meal> findAllMealsSortedByName() {
         List<Meal> listOfMeals = mealRepository.findAll();
         Comparator<Meal> compareByMealName = Comparator.comparing(Meal::getMealName);
         listOfMeals.sort(compareByMealName);

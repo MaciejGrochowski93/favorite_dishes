@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import maciej.grochowski.favorite_dishes.gourmet.Gourmet;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,8 +31,8 @@ public class Meal {
 
     private MealRating mealRating;
 
-    @ManyToMany(mappedBy = "mealsSet")
-    private Set<Gourmet> gourmetSet;
+    @ManyToMany(mappedBy = "mealsList")
+    private List<Gourmet> gourmetList;
 
     @Override
     public boolean equals(Object o) {

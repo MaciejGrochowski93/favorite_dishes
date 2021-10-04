@@ -1,13 +1,12 @@
 package maciej.grochowski.favorite_dishes.meal;
 
 import lombok.AllArgsConstructor;
+import maciej.grochowski.favorite_dishes.gourmet.GourmetService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -17,13 +16,19 @@ import java.util.List;
 @Controller
 public class MealController {
 
+    private final GourmetService gourmetService;
     private final MealService mealService;
 
     @GetMapping
     public String viewMeals(Model model) {
-        List<Meal> allMeals = mealService.findAllMealsByName();
+        List<Meal> allMeals = mealService.findAllMealsSortedByName();
         model.addAttribute("mealsList", allMeals);
         return "meal_page";
+    }
+
+    @GetMapping
+    public String addMealToGourmetList(@PathVariable int gourmetId, @PathVariable int mealId, @Param("rating") MealRating rating) {
+        gourmetService.addMealToGourmetList(gourmetId, mealId, rating);
     }
 
     @GetMapping("/add")
