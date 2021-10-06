@@ -9,7 +9,7 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.ElementCollection;
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,5 +30,5 @@ public class MealDTO {
     private MealRating mealRating;
 
     @ElementCollection(targetClass = Gourmet.class)
-    private Set<Gourmet> gourmetSet;
+    private List<Gourmet> gourmetList;
 }

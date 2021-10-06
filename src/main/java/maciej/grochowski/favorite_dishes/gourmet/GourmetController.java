@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @AllArgsConstructor
 @RequestMapping("/gourmet")
@@ -24,6 +25,13 @@ class GourmetController {
     @GetMapping
     public String home() {
         return "homepage";
+    }
+
+    @GetMapping("/allGourmets")
+    public String viewAllGourmets(Model model) {
+        List<Gourmet> gourmetsList = gourmetService.findAllGourmetsSortByName();
+        model.addAttribute("gourmetsList", gourmetsList);
+        return "gourmet_page";
     }
 
     @GetMapping("/registration")

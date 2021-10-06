@@ -8,8 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RequestMapping("/meal")
@@ -26,21 +28,31 @@ public class MealController {
         return "meal_page";
     }
 
-    @GetMapping
-    public String addMealToGourmetList(@PathVariable int gourmetId, @PathVariable int mealId, @Param("rating") MealRating rating) {
-        gourmetService.addMealToGourmetList(gourmetId, mealId, rating);
+    @GetMapping("/myMeals/{gourmetId}")
+    public String viewGourmetsMeals(@PathVariable int gourmetId, Model model) {
+        List<Meal> mealsOfGourmet = mealService.getMealsOfGourmet(gourmetId);
+        model.addAttribute("mealsList", mealsOfGourmet);
+        return "meal_page";
     }
 
-    @GetMapping("/add")
-    public String addMeal(Model model) {
+    @GetMapping("/myMeals/{gourmetId}/addMeal/{mealId}")
+    public String addMealToGourmetList(@PathVariable int gourmetId,
+                                       @PathVariable int mealId,
+                                       @Param("rating") MealRating rating) {
+        gourmetService.addMealToGourmetList(gourmetId, mealId, rating);
+        return null;
+    }
+
+    @GetMapping("/createMeal")
+    public String createMeal(Model model) {
         MealDTO DTO = new MealDTO();
         model.addAttribute("DTO", DTO);
         return "add_meal";
     }
 
-    @PostMapping("/add")
-    public String addMeal(@ModelAttribute("DTO") @Valid MealDTO DTO,
-                          BindingResult mealResult, Model model) {
+    @PostMapping("/createMeal")
+    public String createMeal(@ModelAttribute("DTO") @Valid MealDTO DTO,
+                             BindingResult mealResult, Model model) {
         if (mealResult.hasErrors()) {
             return "add_meal";
         }
@@ -52,5 +64,9 @@ public class MealController {
             return "add_meal";
         }
         return "homepage";
+    }
+
+    private Optional<String> getPreviousPageByRequest(HttpServletRequest request) {
+        return Optional.ofNullable(request.getHeader("Referer")).map(requestUrl -> "redirect:" + requestUrl);
     }
 }

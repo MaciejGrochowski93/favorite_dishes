@@ -4,7 +4,7 @@
     <div th:replace="fragments/head :: headPart"></div>
 </head>
 <body>
-<form th:action="@{/meal/add}" th:object="${DTO}" method="POST">
+<form th:action="@{/meal/createMeal}" th:object="${DTO}" method="POST">
     <div class="container">
         <div class="form-group">
             <input th:field="*{mealName}" placeholder="Meal name:"/>

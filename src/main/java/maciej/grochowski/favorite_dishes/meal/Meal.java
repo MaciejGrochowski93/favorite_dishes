@@ -5,11 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import maciej.grochowski.favorite_dishes.gourmet.Gourmet;
+import maciej.grochowski.favorite_dishes.gourmet.GourmetRating;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -33,6 +33,9 @@ public class Meal {
 
     @ManyToMany(mappedBy = "mealsList")
     private List<Gourmet> gourmetList;
+
+    @OneToMany(mappedBy = "meal")
+    List<GourmetRating> gourmetRating;
 
     @Override
     public boolean equals(Object o) {

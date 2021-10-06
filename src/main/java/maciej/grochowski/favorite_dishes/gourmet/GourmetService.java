@@ -19,7 +19,7 @@ public class GourmetService {
 
     public void addMealToGourmetList(int gourmetId, int mealId, MealRating rating) {
         List<Meal> mealsOfGourmet = findMealsByGourmetId(gourmetId);
-        Meal meal = mealRepository.findMealById(mealId);;
+        Meal meal = mealRepository.findMealById(mealId);
         if (!mealsOfGourmet.contains(meal)) {
             Meal ratedMeal = Meal.builder()
                     .mealName(meal.getMealName())
@@ -58,9 +58,11 @@ public class GourmetService {
     private boolean emailExists(String email) {
         return gourmetRepository.findGourmetByEmail(email).isPresent();
     }
-}
 
-//    public List<Meal> getMealsListByGourmetId(int gourmetId) {
-//        Gourmet gourmetById = gourmetRepository.findGourmetById(gourmetId);
-//        return gourmetById.getMealsList();
-//    }
+    public List<Gourmet> findAllGourmetsSortByName() {
+        List<Gourmet> gourmets = gourmetRepository.findAll();
+        Comparator<Gourmet> compareByName = Comparator.comparing(Gourmet::getName);
+        gourmets.sort(compareByName);
+        return gourmets;
+    }
+}
