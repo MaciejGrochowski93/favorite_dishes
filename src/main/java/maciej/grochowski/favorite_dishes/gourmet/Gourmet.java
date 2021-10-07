@@ -34,16 +34,6 @@ public class Gourmet {
     @ElementCollection(targetClass = String.class)
     private List<String> roles;
 
-    @ManyToMany
-    @JoinTable(
-            name = "meals_list",
-            joinColumns = @JoinColumn(name = "gourmet_id"),
-            inverseJoinColumns = @JoinColumn(name = "meal_id")
-    )
-    @ElementCollection(targetClass = Meal.class)
-    @JsonIgnore
-    private List<Meal> mealsList;
-
     @OneToMany(mappedBy = "gourmet")
     List<GourmetRating> ratingList;
 }

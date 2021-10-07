@@ -31,11 +31,8 @@ public class Meal {
 
     private MealRating mealRating;
 
-    @ManyToMany(mappedBy = "mealsList")
-    private List<Gourmet> gourmetList;
-
     @OneToMany(mappedBy = "meal")
-    List<GourmetRating> gourmetRating;
+    List<GourmetRating> ratingList;
 
     @Override
     public boolean equals(Object o) {
