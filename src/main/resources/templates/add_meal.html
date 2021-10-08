@@ -21,7 +21,7 @@
         <div class="form-group">
             <label>Taste: </label>
             <select name="mealTaste">
-                <option th:each="tasteOption : ${T(maciej.grochowski.favorite_dishes.meal.MealTaste).values()}"
+                <option th:each="tasteOption : ${T(maciej.grochowski.favorite_dishes.DTO.MealTaste).values()}"
                         th:value="${tasteOption}" th:text="${tasteOption.getDisplayValue()}"></option>
             </select>
         </div>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="fragments/head :: headPart"></div>
+</head>
+<body>
+<div class="container">
+    <div th:if="${gourmetsList!=null and !gourmetsList.isEmpty()}">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Date of birth</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="gourmet : ${gourmetsList}">
+                <td><span th:text="${gourmet.name}"></span></td>
+                <td><span th:text="${gourmet.email}"></span></td>
+                <td><span th:text="${gourmet.birthDate}"></span></td>
+                <td><a th:href="@{'/meal/myMeals/' + ${gourmet.gourmetId}}">Meals of Gourmet</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
