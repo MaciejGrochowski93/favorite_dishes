@@ -1,12 +1,12 @@
 package maciej.grochowski.favorite_dishes.controller;
 
 import lombok.AllArgsConstructor;
-import maciej.grochowski.favorite_dishes.entity.GourmetRating;
-import maciej.grochowski.favorite_dishes.entity.Meal;
-import maciej.grochowski.favorite_dishes.service.GourmetService;
-import maciej.grochowski.favorite_dishes.exception.MealAlreadyExistsException;
 import maciej.grochowski.favorite_dishes.DTO.MealDTO;
 import maciej.grochowski.favorite_dishes.DTO.MealRating;
+import maciej.grochowski.favorite_dishes.entity.GourmetRating;
+import maciej.grochowski.favorite_dishes.entity.Meal;
+import maciej.grochowski.favorite_dishes.exception.MealAlreadyExistsException;
+import maciej.grochowski.favorite_dishes.service.GourmetService;
 import maciej.grochowski.favorite_dishes.service.MealService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -29,6 +29,7 @@ public class MealController {
 
     @GetMapping
     public String viewMeals(Model model) {
+        System.out.println("Pupeczek");
         List<Meal> allMeals = mealService.findAllMealsSortedByName();
         model.addAttribute("mealsList", allMeals);
         return "meal_page";
@@ -41,12 +42,14 @@ public class MealController {
         return "meal_page";
     }
 
-    @GetMapping("/myMeals/addMeal/{mealId}")
-    public String addMealToGourmetList(@PathVariable int gourmetId,
-                                       @PathVariable int mealId,
-                                       @Param("rating") MealRating rating) {
-        gourmetService.addMealToGourmetList(gourmetId, mealId, rating);
-        return "redirect:/meal";
+    @GetMapping("/likeMeal/{mealId}")
+    public String addMealToGourmetList(@PathVariable int mealId,
+                                       @Param("rating") String rating,
+                                       HttpServletRequest request) {
+        System.out.println(mealId);
+        gourmetService.addMealToGourmetList(mealId, rating);
+        System.out.println("Pupek");
+        return getPreviousPageByRequest(request).orElse("/");
     }
 
     @GetMapping("/createMeal")

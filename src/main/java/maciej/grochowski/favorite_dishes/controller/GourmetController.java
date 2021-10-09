@@ -36,6 +36,11 @@ public class GourmetController {
         return "gourmet_page";
     }
 
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+
     @GetMapping("/registration")
     public String registerGourmetForm(WebRequest request, Model model) {
         GourmetRegisterDTO gourmetDTO = new GourmetRegisterDTO();

@@ -7,8 +7,13 @@ import maciej.grochowski.favorite_dishes.entity.Gourmet;
 import maciej.grochowski.favorite_dishes.entity.GourmetRating;
 import maciej.grochowski.favorite_dishes.entity.Meal;
 import maciej.grochowski.favorite_dishes.exception.UserAlreadyExistsException;
+import maciej.grochowski.favorite_dishes.exception.UserDoesNotExist;
 import maciej.grochowski.favorite_dishes.repository.GourmetRepository;
 import maciej.grochowski.favorite_dishes.repository.MealRepository;
+import maciej.grochowski.favorite_dishes.security.MyUserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,10 +27,12 @@ public class GourmetService {
 
     private final GourmetRepository gourmetRepository;
     private final MealRepository mealRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public void removeMealFromGourmetLikeList(int gourmetId, int mealId) {
         Gourmet gourmet = gourmetRepository.findGourmetByGourmetId(gourmetId);
         Meal meal = mealRepository.findMealById(mealId);
+
         List<GourmetRating> ratingList = gourmet.getRatingList();
         ratingList.forEach(rating -> {
             if (rating.getMeal().equals(meal)) {
@@ -34,19 +41,40 @@ public class GourmetService {
         });
     }
 
-    public void addMealToGourmetList(int gourmetId, int mealId, MealRating rating) {
-        List<Meal> mealsOfGourmet = findMealsByGourmetId(gourmetId);
+    public void addMealToGourmetList(int mealId, String rating) {
+        Gourmet gourmet = getPrincipal();
+        List<Meal> mealsOfGourmet = findMealsByGourmetId(gourmet.getGourmetId());
+
         Meal meal = mealRepository.findMealById(mealId);
-        rating = rating.getDisplayValue().equals("liked") ? MealRating.LIKED : MealRating.DISLIKED;
+        MealRating gourmetsRateOfMeal;
+        gourmetsRateOfMeal = rating.equals("liked") ? MealRating.LIKED : MealRating.DISLIKED;
+
         if (!mealsOfGourmet.contains(meal)) {
             Meal ratedMeal = Meal.builder()
                     .mealName(meal.getMealName())
                     .mealTaste(meal.getMealTaste())
                     .mealCountry(meal.getMealCountry())
-                    .mealRating(rating)
+                    .mealRating(gourmetsRateOfMeal)
                     .build();
             mealsOfGourmet.add(ratedMeal);
         }
+    }
+
+    public Gourmet getPrincipal() {
+        String email = getPrincipalEmail();
+        return gourmetRepository.findGourmetByEmail(email)
+                .orElseThrow(() -> new UserDoesNotExist(String.format("Email %s not found", email)));
+    }
+
+    public String getPrincipalEmail() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        if (principal instanceof MyUserDetails) {
+            email = ((MyUserDetails) principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+        return email;
     }
 
     public List<Meal> findMealsByGourmetId(int id) {
@@ -71,11 +99,14 @@ public class GourmetService {
     }
 
     private Gourmet createGourmetFromDTOs(GourmetRegisterDTO gourmetDTO) {
+        String unsafePassword = gourmetDTO.getPassword();
+        String encodedPassword = bCryptPasswordEncoder.encode(unsafePassword);
+
         return Gourmet.builder()
                 .name(gourmetDTO.getName())
                 .birthDate(gourmetDTO.getBirthDate())
                 .email(gourmetDTO.getEmail())
-                .password(gourmetDTO.getPassword())
+                .password(encodedPassword)
                 .ratingList(new ArrayList<>())
                 .roles(Arrays.asList("ROLE_USER"))
                 .build();
