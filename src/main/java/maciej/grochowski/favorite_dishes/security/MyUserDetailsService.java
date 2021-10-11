@@ -35,7 +35,7 @@ public class MyUserDetailsService implements UserDetailsService {
         boolean accountNotLocked = true;
 
         return new User(
-                gourmet.getName(),
+                gourmet.getEmail(),
                 gourmet.getPassword(),
                 enabled,
                 accountNotExpired,

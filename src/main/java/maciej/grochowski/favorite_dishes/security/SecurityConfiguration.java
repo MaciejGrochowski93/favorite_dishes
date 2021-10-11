@@ -41,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/gourmet")
+                .usernameParameter("email")
                 .and()
                 .logout()
                 .invalidateHttpSession(true)

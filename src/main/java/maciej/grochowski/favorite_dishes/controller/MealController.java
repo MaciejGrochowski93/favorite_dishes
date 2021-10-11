@@ -29,7 +29,6 @@ public class MealController {
 
     @GetMapping
     public String viewMeals(Model model) {
-        System.out.println("Pupeczek");
         List<Meal> allMeals = mealService.findAllMealsSortedByName();
         model.addAttribute("mealsList", allMeals);
         return "meal_page";
@@ -46,9 +45,7 @@ public class MealController {
     public String addMealToGourmetList(@PathVariable int mealId,
                                        @Param("rating") String rating,
                                        HttpServletRequest request) {
-        System.out.println(mealId);
         gourmetService.addMealToGourmetList(mealId, rating);
-        System.out.println("Pupek");
         return getPreviousPageByRequest(request).orElse("/");
     }
 

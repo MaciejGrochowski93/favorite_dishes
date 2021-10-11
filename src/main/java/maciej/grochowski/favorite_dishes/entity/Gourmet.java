@@ -21,13 +21,17 @@ public class Gourmet {
     @Column(name = "gourmet_id")
     private Integer gourmetId;
 
-    private String name;
-
     private String email;
+
+    private String name;
 
     private String password;
 
     private LocalDate birthDate;
+
+    private Boolean enabled = true;
+
+    private Boolean locked = false;
 
     @ElementCollection(targetClass = String.class)
     private List<String> roles;

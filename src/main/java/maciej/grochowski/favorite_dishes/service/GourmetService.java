@@ -10,12 +10,13 @@ import maciej.grochowski.favorite_dishes.exception.UserAlreadyExistsException;
 import maciej.grochowski.favorite_dishes.exception.UserDoesNotExist;
 import maciej.grochowski.favorite_dishes.repository.GourmetRepository;
 import maciej.grochowski.favorite_dishes.repository.MealRepository;
-import maciej.grochowski.favorite_dishes.security.MyUserDetails;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -46,8 +47,7 @@ public class GourmetService {
         List<Meal> mealsOfGourmet = findMealsByGourmetId(gourmet.getGourmetId());
 
         Meal meal = mealRepository.findMealById(mealId);
-        MealRating gourmetsRateOfMeal;
-        gourmetsRateOfMeal = rating.equals("liked") ? MealRating.LIKED : MealRating.DISLIKED;
+        MealRating gourmetsRateOfMeal = rating.equals("liked") ? MealRating.LIKED : MealRating.DISLIKED;
 
         if (!mealsOfGourmet.contains(meal)) {
             Meal ratedMeal = Meal.builder()
@@ -61,20 +61,12 @@ public class GourmetService {
     }
 
     public Gourmet getPrincipal() {
-        String email = getPrincipalEmail();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+
         return gourmetRepository.findGourmetByEmail(email)
                 .orElseThrow(() -> new UserDoesNotExist(String.format("Email %s not found", email)));
-    }
-
-    public String getPrincipalEmail() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
-        if (principal instanceof MyUserDetails) {
-            email = ((MyUserDetails) principal).getUsername();
-        } else {
-            email = principal.toString();
-        }
-        return email;
     }
 
     public List<Meal> findMealsByGourmetId(int id) {

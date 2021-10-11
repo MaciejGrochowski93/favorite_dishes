@@ -6,6 +6,13 @@
 <body>
 <form th:action="@{/gourmet/registration}" th:object="${gourmet}" method="POST" enctype="utf8">
     <div class="container">
+
+        <div class="form-group">
+            <input type="email" th:field="*{email}" placeholder="Your email:"/>
+            <p th:each="error : ${#fields.errors('email')}"
+               th:text="${error}" class="alert alert-warning"></p>
+        </div>
+
         <div class="form-group">
             <input th:field="*{name}" placeholder="Your name:"/>
             <p th:each="error: ${#fields.errors('name')}"
@@ -15,12 +22,6 @@
         <div class="form-group">
             <input type="date" th:field="*{birthDate}" placeholder="Your date of birth:"/>
             <p th:each="error : ${#fields.errors('birthDate')}"
-               th:text="${error}" class="alert alert-warning"></p>
-        </div>
-
-        <div class="form-group">
-            <input type="email" th:field="*{email}" placeholder="Your email:"/>
-            <p th:each="error : ${#fields.errors('email')}"
                th:text="${error}" class="alert alert-warning"></p>
         </div>
 

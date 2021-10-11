@@ -9,5 +9,4 @@ public class FavoriteDishesApplication {
     public static void main(String[] args) {
         SpringApplication.run(FavoriteDishesApplication.class, args);
     }
-
 }
